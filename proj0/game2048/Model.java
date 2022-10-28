@@ -94,6 +94,55 @@ public class Model extends Observable {
         setChanged();
     }
 
+    /** Assume moving position is North.
+     *  Move tiles in column <col> of the board into appropriate positions
+     * @param col index of the column to move in board
+     * @return mergedScore
+     */
+    public boolean moveColumn(int col) {
+        int target = size() - 1; // target row
+        boolean changed = false; // if any move happened at all, set it to true
+        for (int row = target - 1; row >= 0; row--) {
+            Tile t = board.tile(col, row);
+            if (t != null) {
+                // before move
+                System.out.println("Before move:");
+                System.out.println(board);
+                // control field for move result
+                // 0: move to null
+                // 1: no merge
+                // 2: merged
+//                int mc;
+
+                System.out.printf("Look at tile(%d, %d)%n\n", col, row);
+                System.out.printf("target is row %d%n\n", target);
+                if (board.tile(col, target) == null) {
+//                    mc = 0;
+
+                    board.move(col, target, t);
+                    changed = true;
+                    System.out.printf("free move to (%d, %d)\n", col, target);
+                } else if (board.tile(col, target).value() != t.value()) { // no merge
+//                    mc = 1;
+                    board.move(col, target - 1, t);
+                    changed = (target - 1) != row; // changed if the move is not to the same row
+                    System.out.printf("non-merged move to (%d, %d)\n", col, target - 1);
+                    target--; // nothing moves pass the row <t> is currently on, so now target is <t>
+                } else {  // a merge
+//                    mc = 2;
+                    score += t.value() * 2;
+                    board.move(col, target, t);
+                    changed = true;
+                    System.out.printf("merged move to (%d, %d)\n", col, target);
+                    target--;
+                }
+                System.out.println("After move:");
+                System.out.println(board);
+                System.out.println("--------------");
+            }
+        }
+        return changed;
+    }
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -105,14 +154,34 @@ public class Model extends Observable {
      * 3. When three adjacent tiles in the direction of motion have the same
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
+     *
+     * IMPLEMENTATION REQUIREMENTS
+     * 1. All movements of tiles on the board must be completed using the `move` method provided by the
+     * Board class
+     * 2. Should only call `move` on a given tile once per call to tilt
      * */
     public boolean tilt(Side side) {
-        boolean changed;
-        changed = false;
+        boolean changed = false;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+
+        // 1. When any merges occur in a move, update the score to reflect the total value of all merges
+        // 2. if anything about the board changes(tile position | merge)
+
+        // Assume the <size> always faces top
+        board.setViewingPerspective(side);
+        // For each column J, and for each non-empty tile in that column,
+        // starting from top to bottom, determine the highest row the tile can
+        // be moved
+
+
+        for (int j = 0; j < size(); j++) { // repeat move for each column
+            changed = moveColumn(j) || changed;
+        }
+
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -137,7 +206,11 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for (Tile t: b) {
+            if (t == null) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -147,7 +220,11 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for (Tile t: b) {
+            if (t != null && t.value() == MAX_PIECE) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -158,7 +235,24 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+
+        for (int i = 0; i < b.size(); ++i) {
+            for (int j = 0; j < b.size(); ++j) {
+                if (i < b.size() - 1) {
+                    if (b.tile(j, i).value() == b.tile(j, i + 1).value()) {
+                        return true;
+                    }
+                }
+                if (j < b.size() - 1) {
+                    if (b.tile(j, i).value() == b.tile(j + 1, i).value()) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
