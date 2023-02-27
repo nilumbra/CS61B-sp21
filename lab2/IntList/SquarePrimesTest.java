@@ -17,4 +17,16 @@ public class SquarePrimesTest {
         assertEquals("14 -> 15 -> 16 -> 289 -> 18", lst.toString());
         assertTrue(changed);
     }
+
+    /**
+     * Test the edges of primality tests.
+     * Specifically, this tests inputs on: 1, 2, 3, 4
+     */
+    @Test()
+    public void testSquarePrimesEdge() {
+        IntList lst = IntList.of(1, 2, 3, 4);
+        boolean changed = IntListExercises.squarePrimes(lst);
+        if (lst != null) assertEquals("1 -> 4 -> 9 -> 4", lst.toString());
+        assertTrue(changed);
+    }
 }
