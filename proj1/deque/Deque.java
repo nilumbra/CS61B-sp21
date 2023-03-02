@@ -56,6 +56,7 @@ public interface Deque<T> {
      * @return
      */
     T get(int index);
+
     Iterator<T> iterator();
 
     /**

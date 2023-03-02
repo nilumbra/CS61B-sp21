@@ -74,4 +74,10 @@ public class MaxArrayDequeTest {
         System.out.println(mdq.max());
         assertTrue(mdq.max().equals(maxStr));
     }
+
+    @Test
+    public void testEmptyMaxArrayCall() {
+        MaxArrayDeque<String> mdq = new MaxArrayDeque<>(new SC());
+        assertNull(mdq.max());
+    }
 }

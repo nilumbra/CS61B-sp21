@@ -1,6 +1,5 @@
 package deque;
 
-import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
@@ -19,9 +18,9 @@ import java.util.Iterator;
  *   the deque while keeping the left/right pointer
  */
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
-    public static final int RESIZE_FACTOR = 2;
-    public static final double USAGE_THRESHOLD = 0.25;
-    private static final int STARTSIZE = 8;
+    private static final int RESIZE_FACTOR = 2;
+    private static final double USAGE_THRESHOLD = 0.25;
+    private static final int START_SIZE = 8;
     private T[] elements;
 
     private int left; // point to the first element of deque
@@ -29,7 +28,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
 
     public ArrayDeque() {
-        elements = (T[]) new Object[STARTSIZE];
+        elements = (T[]) new Object[START_SIZE];
         left = -1;
         right = -1;
     }
@@ -40,11 +39,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      * @returnb boolean, sparse or not
      */
     private boolean isSparse() {
-        if (capacity() <= 16) { return false; } // consider small arrays are always dense
+        if (capacity() <= 16) {
+            return false;
+        } // consider small arrays are always dense
+
         return ((size() - 1) / (double) capacity()) < USAGE_THRESHOLD;
     }
 
-    public int capacity() {
+    private int capacity() {
         return elements.length;
     }
     /**
@@ -66,7 +68,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         } else {
             int firstHalfLen = capacity() - left;
             System.arraycopy(elements, left, a, 0, firstHalfLen);
-            System.arraycopy(elements, 0, a, 0, right + 1);
+            System.arraycopy(elements, 0, a, firstHalfLen, right + 1);
         }
         // before reassigning the temp array back to instance variable array
         // we need to reset the left and right as well
@@ -123,7 +125,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     /**
      * @return boolean, true if deque is full, false otherwise
      */
-    public boolean isFull() {
+    private boolean isFull() {
         return size() == capacity();
     }
 
@@ -133,8 +135,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public int size() {
 //        System.out.printf("%d %d\n", left, right);
-        if (left == right && left == -1) { return 0; }
-        if (left <= right) { return right - left + 1; }
+        if (left == right && left == -1) {
+            return 0;
+        }
+        if (left <= right) {
+            return right - left + 1;
+        }
 
         return right - left + capacity() + 1;
     }
@@ -163,7 +169,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public T removeFirst() {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         // If the array gets too small after this removal, first downsize it
         if (this.isSparse()) {
             resize(capacity() / 2);
@@ -191,7 +199,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public T removeLast() {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         // If the array gets too small after this removal, first downsize it
         if (isSparse()) {
             resize(capacity() / 2);
@@ -214,7 +224,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      *
      * @return double, size : capacity ratio
      */
-    public double usageRate() {
+     private double usageRate() {
         return size() / (double) capacity();
     }
 
@@ -226,7 +236,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public T get(int index) {
-        if (index < 0 || index >= capacity()) { return null; }
+        if (index < 0 || index >= capacity()) {
+            return null;
+        }
         return elements[(left + index) % capacity()];
     }
 
@@ -239,7 +251,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
+
             return offset < size();
+
         }
 
         @Override
@@ -259,19 +273,29 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) { return false; }
-        if (o == this) { return true; }
-        if (o instanceof ArrayDeque<?>) {
-            ArrayDeque<?> other = (ArrayDeque<?>) o;
-            if (other.size() != this.size()) { return false; }
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        System.out.println("here");
+        if (o instanceof Deque<?>) {
+            Deque<?> other = (Deque<?>) o;
+            if (other.size() != this.size()) {
+                return false;
+            }
 
-            Iterator<T> this_iter = this.iterator();
-            Iterator<?> other_iter = other.iterator();
+            Iterator<T> thisIter = this.iterator();
+            Iterator<?> otherIter = other.iterator();
 
-            while (this_iter.hasNext() && other_iter.hasNext()) {
-                if (!this_iter.next().equals(other_iter.next())) { return false; }
+            while (thisIter.hasNext() && otherIter.hasNext()) {
+                if (!thisIter.next().equals(otherIter.next())) {
+                    return false;
+                }
             }
         } else {
+            System.out.println("here not the right type");
             return false; // not the right type
         }
 
