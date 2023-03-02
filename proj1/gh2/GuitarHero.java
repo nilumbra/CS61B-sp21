@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class GuitarHero {
-    public static final GuitarString[] SCALE37= new GuitarString[37];
+    public static final GuitarString[] SCALE37 = new GuitarString[37];
     public static void main(String[] args) {
         /* create two guitar strings, for concert A and C */
         String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";

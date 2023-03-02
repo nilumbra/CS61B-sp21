@@ -261,7 +261,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o == this) return true;
-        if (o instanceof ArrayDeque<?> other_arrdeq) {
+        if (o instanceof ArrayDeque<?>) {
+            Deque<?> other_arrdeq = (ArrayDeque<?>) o;
             if (other_arrdeq.size() != this.size()) return false;
 
             Iterator<T> this_iter = this.iterator();
