@@ -1,7 +1,5 @@
 package deque;
 
-import java.util.Iterator;
-
 /**
  * A sequence container with dynamic sizes that can be expanded or contracted on both ends
  * @param <T>

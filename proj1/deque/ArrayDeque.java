@@ -224,9 +224,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      *
      * @return double, size : capacity ratio
      */
-     private double usageRate() {
+    private double usageRate() {
         return size() / (double) capacity();
-    }
+     }
 
     /**
      * Retrieve an element at index position
@@ -293,7 +293,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             }
         }
-        return true;// every each pair equals
+        return true; // every each pair equals
 //        if (o instanceof Deque<?>) {
 //            Deque<?> other = (Deque<?>) o;
 //            if (other.size() != this.size()) {
