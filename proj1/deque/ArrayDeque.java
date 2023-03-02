@@ -245,7 +245,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private class ArrayDequeIterator<T> implements Iterator<T> {
         int offset;
 
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             offset = 0;
         }
 
@@ -279,20 +279,21 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == this) {
             return true;
         }
-//        System.out.println("here");
 
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        ArrayDeque<?> ad = (ArrayDeque<?>) o;
-        if (ad.size() != this.size()) {
+
+        Deque<T> ol = (Deque<T>) o;
+        if (ol.size() != this.size()) {
             return false;
         }
-        for (int i = 0; i < this.size(); i++) {
-            if (ad.get(i) != get(i)) {
+        for (int i = 0; i < size(); i++) {
+            if (!(ol.get(i).equals(this.get(i)))) {
                 return false;
             }
         }
+        return true;// every each pair equals
 //        if (o instanceof Deque<?>) {
 //            Deque<?> other = (Deque<?>) o;
 //            if (other.size() != this.size()) {
@@ -311,7 +312,5 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 ////            System.out.println("here not the right type");
 //            return false; // not the right type
 //        }
-
-        return true; // every each pair equals
     }
 }

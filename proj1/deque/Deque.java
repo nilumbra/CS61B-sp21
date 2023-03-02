@@ -6,7 +6,7 @@ import java.util.Iterator;
  * A sequence container with dynamic sizes that can be expanded or contracted on both ends
  * @param <T>
  */
-public interface Deque<T> extends Iterable<T>{
+public interface Deque<T> {
     /**
      * Add an item to the front of queue
      * @param item
@@ -57,7 +57,7 @@ public interface Deque<T> extends Iterable<T>{
      */
     T get(int index);
 
-    Iterator<T> iterator();
+//    Iterator<T> iterator();
 
     /**
      * Returns whether the parameter o is equal to the Deque. o is

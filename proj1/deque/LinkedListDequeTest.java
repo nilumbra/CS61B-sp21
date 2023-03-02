@@ -203,13 +203,24 @@ public class LinkedListDequeTest {
 
         assertTrue(dll.equals(dll2));
 
-        dll2.addLast(3);
+        dll2.addLast(3); // 1 2 1 2 3 3
         assertFalse(dll.equals(dll2)); // different size
 
-        dll2.removeFirst();
+        dll2.removeFirst(); // 2 1 2 3 3
         assertFalse(dll.equals(dll2)); // different content
+
+        dll.addLast(3);
+        dll.removeFirst();
+        assertTrue(dll.equals(dll2));
 
         Integer i = 2;
         assertFalse(dll.equals(i)); // different type
+    }
+
+    @Test
+    public void testEmptyEquals() {
+        LinkedListDeque<Integer> ll1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> ll2 = new LinkedListDeque<>();
+        assertTrue(ll1.equals(ll2));
     }
 }

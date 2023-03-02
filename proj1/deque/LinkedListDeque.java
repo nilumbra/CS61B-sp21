@@ -9,7 +9,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         private T ele;
         private Node prev;
         private Node next;
-        Node() {}
+        Node() { }
         Node(T o) {
             ele = o;
         }
@@ -36,14 +36,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         public T getRecursive(int index) {
             if (index < 0 || index >= size) {
                 return null;
-            }
-            else if (index == 0) {
+            } else if (index == 0) {
                 return this.ele;
-            }
-            else if (this.next == head) {
+            } else if (this.next == head) {
                 return null;
-            }
-            else {
+            } else {
                 return this.next.getRecursive(index - 1);
             }
         }
@@ -222,25 +219,26 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) {
+        if (o == null ) {
             return false;
         }
         if (o == this) {
             return true;
         }
 
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        LinkedListDeque<?> lld = (LinkedListDeque<?>) o;
-        if (lld.size() != size) {
+        Deque<T> ol = (Deque<T>) o;
+        if (ol.size() != this.size()) {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (lld.get(i) != get(i)) {
+            if (!(ol.get(i).equals(this.get(i)))) {
                 return false;
             }
         }
+        return true;// if every pair of node equals
 
 //        if (o instanceof Deque<?>) {
 //            Deque<?> other = (Deque<?>) o;
@@ -257,7 +255,5 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 //        } else {
 //            return false; // not the right type
 //        }
-
-        return true; // if every pair of node equals
     }
 }
