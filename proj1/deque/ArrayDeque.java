@@ -226,7 +226,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     private double usageRate() {
         return size() / (double) capacity();
-     }
+    }
 
     /**
      * Retrieve an element at index position
