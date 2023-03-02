@@ -18,7 +18,7 @@ import java.util.Iterator;
  * [] Redesign with dynamic resizing in mind. figure out how to resize
  *   the deque while keeping the left/right pointer
  */
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public static final int RESIZE_FACTOR = 2;
     public static final double USAGE_THRESHOLD = 0.25;
     private static final int startSize = 8;
@@ -119,14 +119,6 @@ public class ArrayDeque<T> implements Deque<T> {
         }
 
         elements[right] = item;
-    }
-
-    /**
-     * @return boolean, true if deque is empty, false otherwise
-     */
-    @Override
-    public boolean isEmpty() {
-        return size() == 0;
     }
 
     /**
@@ -236,15 +228,52 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T get(int index) {
         if (index < 0 || index >= capacity()) return null;
-
         return elements[(left + index) % capacity()];
+    }
+
+    private class ArrayDequeIterator<T> implements Iterator<T> {
+        int offset;
+
+        public ArrayDequeIterator () {
+            offset = 0;
+        }
+        @Override
+        public boolean hasNext() {
+            return offset < size();
+        }
+
+        @Override
+        public T next() {
+            return (T) get(offset++);
+        }
     }
 
     /**
      * @return
      */
     @Override
-    public Iterator iterator() {
-        return null;
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o instanceof ArrayDeque<?> other_arrdeq) {
+            if (other_arrdeq.size() != this.size()) return false;
+
+            Iterator<T> this_iter = this.iterator();
+            Iterator<?> other_iter = other_arrdeq.iterator();
+
+            while (this_iter.hasNext() && other_iter.hasNext()) {
+                if (this_iter.next() != other_iter.next()) return false;
+            }
+        } else {
+            return false; // not the right type
+        }
+
+        return true; // every each pair equals
     }
 }

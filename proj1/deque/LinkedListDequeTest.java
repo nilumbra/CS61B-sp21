@@ -13,9 +13,6 @@ public class LinkedListDequeTest {
      *
      * && is the "and" operation. */
     public void addIsEmptySizeTest() {
-
-//        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-
         LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
 		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
@@ -34,13 +31,11 @@ public class LinkedListDequeTest {
 
 		System.out.println("Printing out deque: ");
 		lld1.printDeque();
-
     }
 
     @Test
     /** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
     public void addRemoveTest() {
-
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
@@ -121,7 +116,7 @@ public class LinkedListDequeTest {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         for (int i = 0; i < 1000000; i++) {
             lld1.addLast(i);
         }
@@ -138,19 +133,83 @@ public class LinkedListDequeTest {
     @Test
     /* Test get works property */
     public void testGet() {
-        LinkedListDeque<Integer> dll = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> dll = new LinkedListDeque<>();
         dll.addFirst(1);
         dll.addFirst(2);
 
         assertSame(1, dll.get(1));
 
-        LinkedListDeque<Integer> dll2 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> dll2 = new LinkedListDeque<>();
         dll2.addLast(1);
         dll2.addLast(2);
         dll2.addLast(3);
 
         assertSame(3, dll2.get(2));
-        int result = -6 % 8;
-        System.out.println(result);
+    }
+
+    @Test
+    /* Test get works property */
+    public void testGetRecursive() {
+        LinkedListDeque<Integer> dll = new LinkedListDeque<>();
+        dll.addFirst(1);
+        dll.addFirst(2);
+
+        assertSame(1, dll.getRecursive(1));
+
+        LinkedListDeque<Integer> dll2 = new LinkedListDeque<>();
+        dll2.addLast(1);
+        dll2.addLast(2);
+        dll2.addLast(3);
+
+        assertSame(3, dll2.getRecursive(2));
+
+        assertNull(dll2.getRecursive(10));
+    }
+
+    @Test
+    /* Test get works property */
+    public void testIterator() {
+        LinkedListDeque<Integer> dll = new LinkedListDeque<>();
+        dll.addFirst(1);
+        dll.addFirst(2);
+        dll.addLast(1);
+        dll.addLast(2);
+        dll.addLast(3);
+
+        int sum = 0;
+        int expectedSum = 9;
+        for (int num: dll) {
+            sum += num;
+        }
+        assertSame(expectedSum, sum);
+    }
+
+    @Test
+    /* Test get works property */
+    public void testEquals() {
+        LinkedListDeque<Integer> dll = new LinkedListDeque<>();
+        dll.addFirst(1);
+        dll.addFirst(2);
+        dll.addLast(1);
+        dll.addLast(2);
+        dll.addLast(3);
+
+        LinkedListDeque<Integer> dll2 = new LinkedListDeque<>();
+        dll2.addFirst(1);
+        dll2.addFirst(2);
+        dll2.addLast(1);
+        dll2.addLast(2);
+        dll2.addLast(3);
+
+        assertTrue(dll.equals(dll2));
+
+        dll2.addLast(3);
+        assertFalse(dll.equals(dll2)); // different size
+
+        dll2.removeFirst();
+        assertFalse(dll.equals(dll2)); // different content
+
+        Integer i = 2;
+        assertFalse(dll.equals(i)); // different type
     }
 }

@@ -2,7 +2,6 @@ package deque;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -197,5 +196,53 @@ public class ArrayDequeTest {
         assertSame(9, dq.get(9));
         dq.removeFirst();
         assertSame(10, dq.get(9));
+    }
+
+    @Test
+    /* Test get works property */
+    public void testIterator() {
+        ArrayDeque<Integer> dll = new ArrayDeque<>();
+        dll.addFirst(1);
+        dll.addFirst(2);
+        dll.addLast(1);
+        dll.addLast(2);
+        dll.addLast(3);
+
+        int sum = 0;
+        int expectedSum = 9;
+        for (int i : dll) {
+            sum += i;
+        }
+
+        assertSame(expectedSum, sum);
+    }
+
+    @Test
+    /* Test get works property */
+    public void testEquals() {
+        Deque<Integer> dll = new ArrayDeque<>();
+        dll.addFirst(1);
+        dll.addFirst(2);
+        dll.addLast(1);
+        dll.addLast(2);
+        dll.addLast(3);
+
+        Deque<Integer> dll2 = new ArrayDeque<>();
+        dll2.addFirst(1);
+        dll2.addFirst(2);
+        dll2.addLast(1);
+        dll2.addLast(2);
+        dll2.addLast(3);
+
+        assertTrue(dll.equals(dll2));
+
+        dll2.addLast(3);
+        assertFalse(dll.equals(dll2)); // different size
+
+        dll2.removeFirst();
+        assertFalse(dll.equals(dll2)); // different content
+
+        Integer i = 2;
+        assertFalse(dll.equals(i)); // different type
     }
 }

@@ -22,7 +22,9 @@ public interface Deque<T> {
     /**
      * @return boolean, true if deque is empty, false otherwise
      */
-    boolean isEmpty();
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 
     /**
      * @return int, the number of elements in the deque
