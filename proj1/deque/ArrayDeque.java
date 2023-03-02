@@ -17,7 +17,7 @@ import java.util.Iterator;
  * [] Redesign with dynamic resizing in mind. figure out how to resize
  *   the deque while keeping the left/right pointer
  */
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private static final int RESIZE_FACTOR = 2;
     private static final double USAGE_THRESHOLD = 0.25;
     private static final int START_SIZE = 8;
@@ -280,24 +280,37 @@ public class ArrayDeque<T> implements Deque<T> {
             return true;
         }
 //        System.out.println("here");
-        if (o instanceof Deque<?>) {
-            Deque<?> other = (Deque<?>) o;
-            if (other.size() != this.size()) {
+
+        if (!(o instanceof ArrayDeque)) {
+            return false;
+        }
+        ArrayDeque<?> ad = (ArrayDeque<?>) o;
+        if (ad.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (ad.get(i) != get(i)) {
                 return false;
             }
-
-            Iterator<T> thisIter = this.iterator();
-            Iterator<?> otherIter = other.iterator();
-
-            while (thisIter.hasNext() && otherIter.hasNext()) {
-                if (!thisIter.next().equals(otherIter.next())) {
-                    return false;
-                }
-            }
-        } else {
-//            System.out.println("here not the right type");
-            return false; // not the right type
         }
+//        if (o instanceof Deque<?>) {
+//            Deque<?> other = (Deque<?>) o;
+//            if (other.size() != this.size()) {
+//                return false;
+//            }
+//
+//            Iterator<T> thisIter = this.iterator();
+//            Iterator<?> otherIter = other.iterator();
+//
+//            while (thisIter.hasNext() && otherIter.hasNext()) {
+//                if (!thisIter.next().equals(otherIter.next())) {
+//                    return false;
+//                }
+//            }
+//        } else {
+////            System.out.println("here not the right type");
+//            return false; // not the right type
+//        }
 
         return true; // every each pair equals
     }

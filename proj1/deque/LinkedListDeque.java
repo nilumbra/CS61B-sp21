@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private Node head;
     private int size;
     private class Node {
@@ -228,21 +228,35 @@ public class LinkedListDeque<T> implements Deque<T> {
         if (o == this) {
             return true;
         }
-        if (o instanceof Deque<?>) {
-            Deque<?> other = (Deque<?>) o;
-            if (other.size() != this.size()) {
+
+        if (!(o instanceof LinkedListDeque)) {
+            return false;
+        }
+        LinkedListDeque<?> lld = (LinkedListDeque<?>) o;
+        if (lld.size() != size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (lld.get(i) != get(i)) {
                 return false;
             }
-            Iterator<T> thisIter = this.iterator();
-            Iterator<?> otherIter = other.iterator();
-            while (otherIter.hasNext() && thisIter.hasNext()) {
-                if (otherIter.next() != thisIter.next()) {
-                    return false;
-                }
-            }
-        } else {
-            return false; // not the right type
         }
+
+//        if (o instanceof Deque<?>) {
+//            Deque<?> other = (Deque<?>) o;
+//            if (other.size() != this.size()) {
+//                return false;
+//            }
+//            Iterator<T> thisIter = this.iterator();
+//            Iterator<?> otherIter = other.iterator();
+//            while (otherIter.hasNext() && thisIter.hasNext()) {
+//                if (otherIter.next() != thisIter.next()) {
+//                    return false;
+//                }
+//            }
+//        } else {
+//            return false; // not the right type
+//        }
 
         return true; // if every pair of node equals
     }
