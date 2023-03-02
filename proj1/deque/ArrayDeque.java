@@ -17,7 +17,7 @@ import java.util.Iterator;
  * [] Redesign with dynamic resizing in mind. figure out how to resize
  *   the deque while keeping the left/right pointer
  */
-public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
+public class ArrayDeque<T> implements Deque<T> {
     private static final int RESIZE_FACTOR = 2;
     private static final double USAGE_THRESHOLD = 0.25;
     private static final int START_SIZE = 8;
@@ -279,7 +279,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == this) {
             return true;
         }
-        System.out.println("here");
+//        System.out.println("here");
         if (o instanceof Deque<?>) {
             Deque<?> other = (Deque<?>) o;
             if (other.size() != this.size()) {
@@ -295,7 +295,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 }
             }
         } else {
-            System.out.println("here not the right type");
+//            System.out.println("here not the right type");
             return false; // not the right type
         }
 
