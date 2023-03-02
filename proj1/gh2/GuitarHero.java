@@ -11,8 +11,6 @@ public class GuitarHero {
             SCALE37[i] = new GuitarString(440 * Math.pow(2, (i - 24) / (double) 12));
         }
 
-
-        GuitarString vibratingString;
         int mainKey = -1;
         int[] hm = new int[2]; // two harmonics of mainKey
         int currHm = 0;
@@ -29,7 +27,7 @@ public class GuitarHero {
                     int m = 1;
                     while ((mainKey + m * 12) < 37 && m <= 2) {
                         int hrmK = mainKey + m * 12;
-                        hm[m-1] = hrmK;
+                        hm[m - 1] = hrmK;
                         SCALE37[hrmK].pluck();
                         currHm++;
                         m++;

@@ -1,5 +1,6 @@
 package deque;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
@@ -10,7 +11,6 @@ import java.util.Iterator;
  * - get(i)         O(1)
  * - size()         O(1)
  *
- * TODO:
  * [] First, implement a fixed sized deque with circular array trick,
  *    Figuring out how to manipulate left/right pointers
  *    which indicates the head and tail of the deque to create
@@ -21,7 +21,7 @@ import java.util.Iterator;
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public static final int RESIZE_FACTOR = 2;
     public static final double USAGE_THRESHOLD = 0.25;
-    private static final int startSize = 8;
+    private static final int STARTSIZE = 8;
     private T[] elements;
 
     private int left; // point to the first element of deque
@@ -29,7 +29,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
 
     public ArrayDeque() {
-        elements = (T[]) new Object[startSize];
+        elements = (T[]) new Object[STARTSIZE];
         left = -1;
         right = -1;
     }
@@ -40,21 +40,20 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      * @returnb boolean, sparse or not
      */
     private boolean isSparse() {
-        if (capacity() <= 16) return false; // consider small arrays are always dense
-        return ((size() - 1) / (double)capacity()) < USAGE_THRESHOLD;
+        if (capacity() <= 16) { return false; } // consider small arrays are always dense
+        return ((size() - 1) / (double) capacity()) < USAGE_THRESHOLD;
     }
 
     public int capacity() {
         return elements.length;
     }
     /**
-     * TODO:
-     * - Figure out how to handle the resizing
+     * Figure out how to handle the resizing
      * We are going to implement this with circular array
      *
      * Resize the array to capacity specified WITHOUT modifying any
      * element in the array.
-     * A new array will be created an it starts with the first element,
+     * A new array will be created which starts with the first element,
      * that is, the element `left` points to in the original array
      * @param capacity
      */
@@ -65,16 +64,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (left < right) {
             System.arraycopy(elements, left,  a, 0,  size());
         } else {
-            int first_half_len = capacity() - left;
-            System.arraycopy(elements, left, a, 0, first_half_len);
+            int firstHalfLen = capacity() - left;
+            System.arraycopy(elements, left, a, 0, firstHalfLen);
             System.arraycopy(elements, 0, a, 0, right + 1);
         }
         // before reassigning the temp array back to instance variable array
         // we need to reset the left and right as well
 
-        int _size = size();
+        int S = size();
         left = 0;
-        right = left + _size - 1;
+        right = left + S - 1;
 
         elements = a;
     }
@@ -86,7 +85,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public void addFirst(T item) {
-        if(isFull()) {
+        if (isFull()) {
             resize(capacity() * RESIZE_FACTOR);
         }
 
@@ -107,7 +106,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public void addLast(T item) {
-        if(isFull()) {
+        if (isFull()) {
             resize(capacity() * RESIZE_FACTOR);
         }
 
@@ -134,8 +133,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public int size() {
 //        System.out.printf("%d %d\n", left, right);
-        if (left == right && left == -1) return 0;
-        if (left <= right) return right - left + 1;
+        if (left == right && left == -1) { return 0; }
+        if (left <= right) { return right - left + 1; }
 
         return right - left + capacity() + 1;
     }
@@ -148,8 +147,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public void printDeque() {
         if (size() > 0) {
-            int _r = right > left ? right : right + capacity();
-            for (int i = left; i <= _r; i++) {
+            int R = right > left ? right : right + capacity();
+            for (int i = left; i <= R; i++) {
                 System.out.print(elements[i % capacity()]);
                 System.out.print(' ');
             }
@@ -227,16 +226,17 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public T get(int index) {
-        if (index < 0 || index >= capacity()) return null;
+        if (index < 0 || index >= capacity()) { return null; }
         return elements[(left + index) % capacity()];
     }
 
     private class ArrayDequeIterator<T> implements Iterator<T> {
         int offset;
 
-        public ArrayDequeIterator () {
+        public ArrayDequeIterator() {
             offset = 0;
         }
+
         @Override
         public boolean hasNext() {
             return offset < size();
@@ -259,17 +259,17 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
+        if (o == null) { return false; }
+        if (o == this) { return true; }
         if (o instanceof ArrayDeque<?>) {
-            Deque<?> other_arrdeq = (ArrayDeque<?>) o;
-            if (other_arrdeq.size() != this.size()) return false;
+            ArrayDeque<?> other = (ArrayDeque<?>) o;
+            if (other.size() != this.size()) { return false; }
 
             Iterator<T> this_iter = this.iterator();
-            Iterator<?> other_iter = other_arrdeq.iterator();
+            Iterator<?> other_iter = other.iterator();
 
             while (this_iter.hasNext() && other_iter.hasNext()) {
-                if (this_iter.next() != other_iter.next()) return false;
+                if (!this_iter.next().equals(other_iter.next())) { return false; }
             }
         } else {
             return false; // not the right type
