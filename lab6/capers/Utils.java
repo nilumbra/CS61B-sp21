@@ -54,17 +54,17 @@ class Utils {
     static void writeContents(File file, Object... contents) {
         try {
             if (file.isDirectory()) {
-                throw
-                        new IllegalArgumentException("cannot overwrite directory");
+                throw new IllegalArgumentException("cannot overwrite directory");
             }
-            BufferedOutputStream str =
-                    new BufferedOutputStream(Files.newOutputStream(file.toPath()));
+            // Create a output stream
+            BufferedOutputStream str = new BufferedOutputStream(Files.newOutputStream(file.toPath()));
             for (Object obj : contents) {
                 if (obj instanceof byte[]) {
                     str.write((byte[]) obj);
                 } else {
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
                 }
+//                str.write("\n".getBytes());
             }
             str.close();
         } catch (IOException | ClassCastException excp) {
@@ -112,7 +112,6 @@ class Utils {
 
 
     /* SERIALIZATION UTILITIES */
-
     /** Returns a byte array containing the serialized contents of OBJ. */
     static byte[] serialize(Serializable obj) {
         try {

@@ -1,6 +1,8 @@
 package capers;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 import static capers.Utils.*;
 
@@ -36,10 +38,18 @@ public class Main {
      *
      * @param args arguments from the command line
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             Utils.exitWithError("Must have at least one argument");
         }
+//        System.out.println("args:" + Arrays.toString(args));
+//        File f = new File("test.txt");
+//        try {
+//            f.createNewFile();
+//            Utils.writeContents(f, "dadadada!", "dadaada");
+//        } catch (IOException ioe) {
+//            System.out.println(ioe.getMessage());
+//        }
 
         CapersRepository.setupPersistence();
         String text;
@@ -52,11 +62,15 @@ public class Main {
             break;
         case "dog":
             validateNumArgs("dog", args, 4);
-            // TODO: make a dog
+            // Assume the command call is in format:
+            // dog Mammoth "German Spitz" 10
+            CapersRepository.makeDog(args[1], args[2], Integer.parseInt(args[3]));
+
             break;
         case "birthday":
             validateNumArgs("birthday", args, 2);
-            // TODO: celebrate this dog's birthday
+            CapersRepository.celebrateBirthday(args[1]);
+
             break;
         default:
             exitWithError(String.format("Unknown command: %s", args[0]));

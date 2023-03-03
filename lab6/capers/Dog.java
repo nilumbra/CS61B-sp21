@@ -2,16 +2,18 @@ package capers;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import static capers.Utils.*;
 
 /** Represents a dog that can be serialized.
  * @author TODO
 */
-public class Dog { // TODO
+public class Dog implements Serializable {
 
     /** Folder that dogs live in. */
-    static final File DOG_FOLDER = null; // TODO (hint: look at the `join`
-                                         //      function in Utils)
+    static final File DOG_FOLDER = CapersRepository.dogDir;
 
     /** Age of dog. */
     private int age;
@@ -39,6 +41,14 @@ public class Dog { // TODO
      * @return Dog read from file
      */
     public static Dog fromFile(String name) {
+        String[] allDogs = DOG_FOLDER.list();
+        for (String d: allDogs) {
+            if (d.equals(name)) {
+                return readObject(join(DOG_FOLDER, d), Dog.class);
+            }
+        }
+
+        exitWithError("ERR!! The dog named '" + name + "' does not exist.");
         // TODO (hint: look at the Utils file)
         return null;
     }
@@ -56,7 +66,14 @@ public class Dog { // TODO
      * Saves a dog to a file for future use.
      */
     public void saveDog() {
-        // TODO (hint: don't forget dog names are unique)
+        String[] allDogs = DOG_FOLDER.list();
+        for (String d: allDogs) {
+            if (d.equals(this.name)) {
+                (new File(this.name)).delete();
+                break;
+            }
+        }
+        writeObject(join(DOG_FOLDER, this.name), this);
     }
 
     @Override
@@ -65,5 +82,4 @@ public class Dog { // TODO
             "Woof! My name is %s and I am a %s! I am %d years old! Woof!",
             name, breed, age);
     }
-
 }
